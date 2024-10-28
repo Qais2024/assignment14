@@ -73,7 +73,7 @@ class _WorkerListState extends State<WorkerList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
         title: Center(child: Text("List of Workers")),
       ),
       floatingActionButton: FloatingActionButton(
@@ -117,7 +117,7 @@ class _WorkerListState extends State<WorkerList> {
               );
             },
             child: Card(
-              color: Colors.green,
+              color: Colors.blue,
               child: ListTile(
                 leading: GestureDetector(
                   onTap: () {

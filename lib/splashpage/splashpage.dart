@@ -1,24 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:zalal/firstpage/firstpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zalal/firstpage/girdtilepage.dart';
+import 'package:zalal/loginpages/views/loginpage.dart';
+
 class splash_page extends StatefulWidget {
   const splash_page({super.key});
   @override
   State<splash_page> createState() => _splash_pageState();
 }
+
 class _splash_pageState extends State<splash_page> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2),(){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => firstpage(),));
-    });
+    startSplashScreen();
   }
+
+  void startSplashScreen() async {
+    // مدت زمان تأخیر ۳ ثانیه
+    await Future.delayed(Duration(seconds: 3));
+    checkLoginStatus();
+  }
+
+  void checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    // اگر کاربر قبلاً وارد شده بود، به صفحه اصلی بروید، در غیر این صورت به صفحه لاگین
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const gridepage()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const loginscresn()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:SizedBox(
+      body: SizedBox(
         height: double.infinity,
         width: double.infinity,
         child: Stack(
@@ -28,7 +50,7 @@ class _splash_pageState extends State<splash_page> {
               left: 0,
               right: 0,
               child: CircleAvatar(
-                backgroundImage:AssetImage("image/splash.jpg") ,
+                backgroundImage: AssetImage("image/factor.jpg"),
                 radius: 150,
               ),
             ),
@@ -36,10 +58,10 @@ class _splash_pageState extends State<splash_page> {
                 bottom: 50,
                 left: 0,
                 right: 0,
-                child: Center(child: Text("V 0.0.1")))
+                child: Center(child: Text("V 0.1.0"))),
           ],
         ),
-      )
+      ),
     );
   }
 }

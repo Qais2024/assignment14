@@ -65,17 +65,18 @@ class _salesreportsState extends State<salesreports> {
           String productName = productQuantities.keys.elementAt(index);
           int totalFee = productQuantities[productName]!;
           return Card(
+            color: Colors.blue,
             child: ListTile(
               title: Row(
                 children: [
                   Text("Item name: ",style: TextStyle(color: Colors.black87),),
-                  Text("$productName",style: TextStyle(color: Colors.blue),),
+                  Text("$productName",style: TextStyle(color: Colors.black87),),
                 ],
               ),
               subtitle:Row(
                 children: [
                   Text("Salse : ",style: TextStyle(color: Colors.black87),),
-                  Text("$totalFee",style: TextStyle(color: Colors.blue),),
+                  Text("$totalFee",style: TextStyle(color: Colors.black87),),
                 ],
               ),
             ),

@@ -151,7 +151,7 @@ class _SalesFactorsState extends State<receivedlist> {
               },);
             },
             child: Card(
-              color: Colors.white,
+              color: Colors.blue,
               child: ListTile(
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,11 +161,6 @@ class _SalesFactorsState extends State<receivedlist> {
                     Text("Customer: ${filteredFactorss[index]["name"]}"),
                     SizedBox(height: 10),
                     Text("Total Bell: ${totalBell.toStringAsFixed(1)}",
-                      style: TextStyle(
-                        color: totalBell > (double.tryParse(filteredFactorss[index]["total"].toString()) ?? 0)
-                            ? Colors.red
-                            : Colors.green,
-                      ),
                     ),
                   ],
                 ),

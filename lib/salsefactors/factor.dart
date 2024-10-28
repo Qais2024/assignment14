@@ -101,6 +101,22 @@ class _NewFactorState extends State<newfactor> {
     });
   }
 
+  void loadProductPrice(String productName) async {
+    var box = await Hive.openBox("abcbox");
+    String productListJson = box.get("productlist", defaultValue: '[]');
+    List<dynamic> products = jsonDecode(productListJson);
+
+    // پیدا کردن قیمت محصول بر اساس نام
+    for (var product in products) {
+      if (product["name"].toString() == productName) {
+        // قیمت را در فیلد مربوطه قرار دهید
+        double price = double.tryParse(product["perprice"].toString()) ?? 0.0;
+        priceControllers[objectControllers.length - 1].text = price.toString();
+        break;
+      }
+    }
+  }
+
   void addRow() {
     setState(() {
       TextEditingController objectController = TextEditingController();
@@ -275,6 +291,7 @@ class _NewFactorState extends State<newfactor> {
                         onChanged: (String? newValue) {
                           setState(() {
                             Salectedstaf = newValue;
+                            loadProductPrice(newValue!);
                           });
                         },
                         buttonStyleData: ButtonStyleData(
@@ -373,6 +390,21 @@ class _NewFactorState extends State<newfactor> {
                   ),
                 ],
               ),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text("Products: ${objectControllers.length}"),
+                    ],
+                  ),
+                  SizedBox(width:70 ,),
+                  Column(
+                    children: [
+                      Text("Factor",style: TextStyle(color: Colors.blue,fontSize: 24,),),
+                    ],)
+                ],
+              ),
               SizedBox(height: 10),
               Table(
                 columnWidths: const {
@@ -383,40 +415,11 @@ class _NewFactorState extends State<newfactor> {
                   4: FlexColumnWidth(1),
                 },
                 children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    children: [
-                      // Text(
-                      //   " P",
-                      //   style: TextStyle(fontSize: 15, color: Colors.yellow),
-                      // ),
-                      Icon(Icons.production_quantity_limits),
-                      // Text(
-                      //   "Q t y",
-                      //   style: TextStyle(fontSize: 15, color: Colors.yellow),
-                      // ),
-                      Icon(Icons.onetwothree_sharp,),
-                      // Text(
-                      //   "P r i c e",
-                      //   style: TextStyle(fontSize: 15, color: Colors.yellow),
-                      // ),
-                      Icon(Icons.monetization_on_outlined),
-                      // Text(
-                      //   "T o t a l",
-                      //   style: TextStyle(fontSize: 15, color: Colors.yellow),
-                      // ),
-                      Icon(Icons.monetization_on_rounded),
-                      Text(
-                        "",
-                        style: TextStyle(fontSize: 15, color: Colors.yellow),
-                      ),
-                    ],
-                  ),
                   for (int i = 0; i < objectControllers.length; i++)
                     TableRow(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.fromBorderSide(BorderSide(color: Colors.blue,strokeAlign: 0))),
                       children: [
                         Expanded(
                           child: DropdownButton2<String>(
@@ -436,21 +439,16 @@ class _NewFactorState extends State<newfactor> {
                             },
                             hint: Text('Product'),
                             buttonStyleData: const ButtonStyleData(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              height: 40,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 50,
                               width: 250,
                             ),
-                            dropdownStyleData: const DropdownStyleData(
-                              maxHeight: 250,
-                            ),
-                            menuItemStyleData: const MenuItemStyleData(
-                              height: 40,
-                            ),
+
                             dropdownSearchData: DropdownSearchData(
                               searchController: textEditingController,
                               searchInnerWidgetHeight: 50,
                               searchInnerWidget: Container(
-                                height: 50,
+                                height: 60,
                                 padding: const EdgeInsets.only(
                                   top: 8,
                                   bottom: 4,
@@ -493,7 +491,7 @@ class _NewFactorState extends State<newfactor> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Qty",
+                            hintText: "  Qty",
                             hintStyle: TextStyle(fontSize: 14),
                           ),
                         ),
@@ -512,7 +510,7 @@ class _NewFactorState extends State<newfactor> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: "Total",
+                            hintText: "Total        ",
                             hintStyle: TextStyle(fontSize: 14),
                           ),
                         ),
@@ -538,7 +536,6 @@ class _NewFactorState extends State<newfactor> {
                     ),
                 ],
               ),
-              Divider(),
             ],
           ),
         ),

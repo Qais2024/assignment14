@@ -72,7 +72,7 @@ class _WorkerPageState extends State<workerpage> {
         child: Icon(Icons.save),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.blue,
         title: Text("Register Worker"),
       ),
       body: SingleChildScrollView(

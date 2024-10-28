@@ -14,7 +14,7 @@ class receivedfactor extends StatefulWidget {
 class _NewFactorState extends State<receivedfactor> {
   String? Salectedstaf;
   List<String> staffnameslist = [];
-
+  TextEditingController textEditingController = TextEditingController();
   List<Map<String, dynamic>> productList = [];
   List<String> productNames = [];
   List<TextEditingController> objectControllers = [];
@@ -295,6 +295,21 @@ class _NewFactorState extends State<receivedfactor> {
                 ],
               ),
               SizedBox(height: 10),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text("Products: ${objectControllers.length}"),
+                    ],
+                  ),
+                  SizedBox(width:70 ,),
+                  Column(
+                    children: [
+                    Text("Factor",style: TextStyle(color: Colors.blue,fontSize: 24,),),
+                  ],)
+                ],
+              ),
+              SizedBox(height: 10),
               Table(
                 columnWidths: const {
                   0: FlexColumnWidth(3),
@@ -304,24 +319,14 @@ class _NewFactorState extends State<receivedfactor> {
                   4: FlexColumnWidth(1),
                 },
                 children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    children: [
-                      Text(" Product", ),
-                      Text("Qty", ),
-                      Text("Price",),
-                      Text("Total", ),
-                      Text("delete", ),
-                    ],
-                  ),
                   for (int i = 0; i < objectControllers.length; i++)
                     TableRow(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
+                       border: Border.fromBorderSide(BorderSide(color: Colors.blue,strokeAlign: 0))
+                      ),
                       children: [
                         Expanded(
-                          child: DropdownButtonFormField<String>(
+                          child: DropdownButton2<String>(
                             value: objectControllers[i].text.isNotEmpty ? objectControllers[i].text : null, // مقدار اولیه
                             items: productNames
                                 .map((name) => DropdownMenuItem<String>(
@@ -335,6 +340,46 @@ class _NewFactorState extends State<receivedfactor> {
                               });
                             },
                             hint: Text('Product'),
+                            dropdownSearchData: DropdownSearchData(
+                              searchController: textEditingController,
+                              searchInnerWidgetHeight: 50,
+                              searchInnerWidget: Container(
+                                height: 60,
+                                padding: const EdgeInsets.only(
+                                  top: 8,
+                                  bottom: 4,
+                                  right: 8,
+                                  left: 8,
+                                ),
+                                child: TextFormField(
+                                  expands: true,
+                                  maxLines: null,
+                                  controller: textEditingController,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
+                                    hintText: 'Search for an item...',
+                                    hintStyle: const TextStyle(fontSize: 12),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              searchMatchFn: (item, searchValue) {
+                                return item.value
+                                    .toString()
+                                    .contains(searchValue);
+                              },
+                            ),
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingController.clear();
+                              }
+                            },
                           ),
                         ),
                         TextFormField(

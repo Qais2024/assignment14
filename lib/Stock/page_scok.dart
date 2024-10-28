@@ -92,7 +92,7 @@ class _salesreportsState extends State<Stock_page> {
       return Center(child: CircularProgressIndicator());
     }
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.amberAccent,
+      appBar: AppBar(backgroundColor: Colors.blue,
       title: Text("Stock list"),),
       body: ListView.builder(
         itemCount: productQuantities.length,
@@ -102,27 +102,28 @@ class _salesreportsState extends State<Stock_page> {
           int receivedQty = receivedQuantities[productName] ?? 0;
           int totalobject=receivedQty-totalFee;
           return Card(
+            color: Colors.blue,
             child: ListTile(
               title: Row(
                 children: [
-                  Text("Item name: ", style: TextStyle(color: Colors.black87)),
+                  Text("Item name: ",),
                   Text("$productName", style: TextStyle(color: Colors.blue,fontSize: 15)),
                 ],
               ),
               subtitle: Row(
                 children: [
-                  Text("Sales object: ", style: TextStyle(color: Colors.black87)),
+                  Text("Sales object: ",),
                   Text("$totalFee", style: TextStyle(color: Colors.red)),
                   SizedBox(width: 20),
-                  Text("Received object: ", style: TextStyle(color: Colors.black87)),
-                  Text("$receivedQty", style: TextStyle(color: Colors.blue)),
+                  Text("Received object: ",),
+                  Text("$receivedQty", style: TextStyle(color: Colors.black87)),
                 ],
               ),
               trailing: Column(children: [
-                Text("Total", style: TextStyle(color: Colors.black87,fontSize: 15)),
+                Text("Total",),
                 Text( "$totalobject",
                     style: TextStyle(
-                        color: totalobject < 0 ? Colors.red : totalobject > 0 ? Colors.green : Colors.black,fontSize: 15)),
+                        color: totalobject < 0 ? Colors.red : totalobject > 0 ? Colors.white : Colors.black,fontSize: 15)),
               ],),
             ),
           );

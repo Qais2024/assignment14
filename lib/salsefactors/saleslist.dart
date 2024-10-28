@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:zalal/reports/salsereportes.dart';
 import 'package:zalal/salsefactors/factor.dart';
+import 'package:url_launcher/url_launcher.dart';
 class factors_page extends StatefulWidget {
   const factors_page({super.key});
   @override
@@ -21,13 +22,22 @@ class _SalesFactorsState extends State<factors_page> {
       filterFactorss();
     });
   }
+
+  Future<void> _callcustomer(String number) async {
+    final Uri launcher = Uri(scheme: 'tel', path: number);
+    await launchUrl(launcher);
+  }
+
+
   void filterFactorss() {
     String searchText = searchControllers.text.toLowerCase();
     setState(() {
       filteredFactorss = factorsList.where((factor) {
         String driverName = (factor["name"] ?? "").toLowerCase();
         String carNumber = (factor["number"] ?? "").toLowerCase();
-        return driverName.contains(searchText) || carNumber.contains(searchText);
+        String factornumber = (factor["no"] ?? "").toLowerCase();
+        String username = (factor["username"] ?? "").toLowerCase();
+        return driverName.contains(searchText) || carNumber.contains(searchText)||factornumber.contains(searchText)||username.contains(searchText);
       }).toList();
     });
   }
@@ -91,7 +101,7 @@ class _SalesFactorsState extends State<factors_page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Colors.orange,
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addFactor();
@@ -146,25 +156,30 @@ class _SalesFactorsState extends State<factors_page> {
             },);
             },
             child: Card(
-                   color: Colors.white,
-              child: ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: 10),
-                    Text("Customer: ${filteredFactorss[index]["name"]}"),
-                    SizedBox(height: 10),
-                    Text("Total Bell: ${totalBell.toStringAsFixed(1)}",
-                      style: TextStyle(
-                        color: totalBell > (double.tryParse(filteredFactorss[index]["total"].toString()) ?? 0)
-                            ? Colors.red
-                            : Colors.green,
+              color: Colors.blue,
+              child: Container(
+                child: ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10),
+                      Text("Customer: ${filteredFactorss[index]["name"]}"),
+                      SizedBox(height: 10),
+                      Text("Total Bell: ${totalBell.toStringAsFixed(0)}",
+                        style: TextStyle(
+                          color: (double.tryParse(filteredFactorss[index]["totalpay"].toString()) ?? 0) < totalBell
+                              ? Colors.red // اگر total payment کمتر از total Bell باشد
+                              : Colors.black, // در غیر این صورت رنگ سیاه
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text("Total payment: ${filteredFactorss[index]["totalpay"]}"),
-                  ],
+
+                      SizedBox(height: 10),
+                      Text("Total payment: ${filteredFactorss[index]["totalpay"]}"),
+                    ],
+                  ),
+                  trailing: IconButton(onPressed:()=>_callcustomer(filteredFactorss[index]["number"]),
+                      icon: Icon(Icons.call))
                 ),
               ),
             ),

@@ -65,17 +65,18 @@ class _receivedreportsState extends State<receivedreports> {
           String producname=productquantities.keys.elementAt(index);
           int totalfeed=productquantities[producname]!;
         return Card(
+          color: Colors.blue,
           child:ListTile(
             title: Row(
               children: [
                 Text("Item name: ",style: TextStyle(color: Colors.black87),),
-                Text("$producname",style: TextStyle(color: Colors.blue),),
+                Text("$producname",style: TextStyle(color: Colors.black87),),
               ],
             ),
             subtitle:Row(
               children: [
                 Text("Received: ",style: TextStyle(color: Colors.black87),),
-                Text("$totalfeed",style: TextStyle(color: Colors.blue),),
+                Text("$totalfeed",style: TextStyle(color: Colors.black87),),
               ],
             ),
           )

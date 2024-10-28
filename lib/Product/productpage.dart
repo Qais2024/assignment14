@@ -5,11 +5,12 @@ import 'package:flutter/widgets.dart';
 class objectpage extends StatefulWidget {
   final Map<String, dynamic>? products;
   const objectpage({super.key, this.products});
+
   @override
-  State<objectpage> createState() => _productspageState();
+  State<objectpage> createState() => _ObjectPageState();
 }
 
-class _productspageState extends State<objectpage> {
+class _ObjectPageState extends State<objectpage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController idlar = TextEditingController();
   TextEditingController namelar = TextEditingController();
@@ -17,7 +18,7 @@ class _productspageState extends State<objectpage> {
   TextEditingController totalprice = TextEditingController();
   TextEditingController perprice = TextEditingController();
   TextEditingController salselae = TextEditingController();
-  @override
+
   @override
   void initState() {
     super.initState();
@@ -29,8 +30,33 @@ class _productspageState extends State<objectpage> {
       perprice.text = widget.products!["perprice"]!;
       salselae.text = widget.products!["salse"]!;
     }
+
+    // افزودن لیسنر به totalprice
+    totalprice.addListener(() {
+      calculatePerPrice();
+    });
+
+    // افزودن لیسنر به perpaklar
+    perpaklar.addListener(() {
+      calculatePerPrice();
+    });
   }
 
+  void calculatePerPrice() {
+    // تبدیل مقادیر به double
+    double totalPriceValue = double.tryParse(totalprice.text) ?? 0;
+    double perPackValue = double.tryParse(perpaklar.text) ?? 1; // به‌منظور جلوگیری از تقسیم بر صفر
+
+    // محاسبه perprice
+    if (perPackValue > 0) {
+      double calculatedPerPrice = totalPriceValue / perPackValue;
+      perprice.text = calculatedPerPrice.toStringAsFixed(2); // دو رقم اعشار
+    } else {
+      perprice.text = '0'; // در صورت صفر بودن perpak
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -49,8 +75,8 @@ class _productspageState extends State<objectpage> {
         child: Icon(Icons.save),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
-        title: Text("Registar product"),
+        backgroundColor: Colors.blue,
+        title: Text("Register Product"),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -95,13 +121,13 @@ class _productspageState extends State<objectpage> {
                   keyboardType: TextInputType.number,
                   controller: perpaklar,
                   decoration: InputDecoration(
-                    labelText: "Every pack",
+                    labelText: "Every Pack",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   validator: (value) {
-                    return value!.isEmpty ? "Please enter Per pack" : null;
+                    return value!.isEmpty ? "Please enter Per Pack" : null;
                   },
                 ),
               ),
@@ -111,13 +137,13 @@ class _productspageState extends State<objectpage> {
                   keyboardType: TextInputType.number,
                   controller: totalprice,
                   decoration: InputDecoration(
-                    labelText: "Total price",
+                    labelText: "Total Price",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   validator: (value) {
-                    return value!.isEmpty ? "Please enter Total price" : null;
+                    return value!.isEmpty ? "Please enter Total Price" : null;
                   },
                 ),
               ),
@@ -132,9 +158,7 @@ class _productspageState extends State<objectpage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  validator: (value) {
-                    return value!.isEmpty ? "Please enter Per price" : null;
-                  },
+                  readOnly: true, // غیر قابل ویرایش
                 ),
               ),
               Padding(
@@ -143,13 +167,13 @@ class _productspageState extends State<objectpage> {
                   controller: salselae,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: "Salse ",
+                    labelText: "Sales",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   validator: (value) {
-                    return value!.isEmpty ? "Please enter Salse" : null;
+                    return value!.isEmpty ? "Please enter Sales" : null;
                   },
                 ),
               ),
